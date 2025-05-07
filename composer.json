@@ -1,6 +1,11 @@
 {
-    "name": "vendor-name/server-time-clock",
+    "name": "alex-no/server-time-clock",
     "description": "PSR-20 clock implementation that returns the current server time based on its local timezone.",
+    "homepage": "https://github.com/alex-no/server-time-clock",
+    "support": {
+      "issues": "https://github.com/alex-no/server-time-clock/issues",
+      "source": "https://github.com/alex-no/server-time-clock"
+    },
     "type": "library",
     "require": {
       "php": "^8.3",
@@ -22,9 +27,13 @@
     "license": "MIT",
     "authors": [
       {
-        "name": "Your Name",
-        "email": "your@email.com"
+        "name": "Oleksandr Nosov",
+        "email": "alex@4n.com.ua"
       }
     ],
-    "minimum-stability": "stable"
+    "config": {
+      "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
