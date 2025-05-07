@@ -1,0 +1,30 @@
+{
+    "name": "vendor-name/server-time-clock",
+    "description": "PSR-20 clock implementation that returns the current server time based on its local timezone.",
+    "type": "library",
+    "require": {
+      "php": "^8.3",
+      "psr/clock": "^1.0"
+    },
+    "autoload": {
+      "psr-4": {
+        "ServerTimeClock\\": "src/"
+      }
+    },
+    "autoload-dev": {
+      "psr-4": {
+        "ServerTimeClock\\Tests\\": "tests/"
+      }
+    },
+    "require-dev": {
+      "phpunit/phpunit": "^10.5"
+    },
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Your Name",
+        "email": "your@email.com"
+      }
+    ],
+    "minimum-stability": "stable"
+}
