@@ -34,6 +34,17 @@
     "config": {
       "sort-packages": true
     },
+    "suggest": {
+      "yiisoft/yii2": "Required if you use the ServerClockComponent in Yii2.",
+      "laravel/framework": "Required if you use the Laravel service provider."
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "ServerTimeClock\\Laravel\\ServerClockServiceProvider"
+        ]
+      }
+    },
     "minimum-stability": "stable",
     "prefer-stable": true
 }
