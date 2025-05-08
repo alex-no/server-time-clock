@@ -23,12 +23,11 @@ class CacheManager
      */
     public function getCachedTimeData(): array
     {
-        $now = microtime(true);
-
         if ($this->isCacheEnabled() && $this->isApcuAvailable()) {
             $cache = apcu_fetch(self::CACHE_KEY);
             if (!empty($cache)) {
-                $serverTime = $now + $cache['time_diff'];
+                $now = microtime(true);
+                $serverTime = $cache['time_diff'] + $now;
                 $dt = DateTimeImmutable::createFromFormat('U.u', sprintf('%.6f', $serverTime))
                     ->setTimezone(new DateTimeZone($cache['timezone']));
 
@@ -40,13 +39,13 @@ class CacheManager
             }
         }
 
-        return $this->updateCache($now);
+        return $this->updateCache();
     }
 
     /**
      * Fetches new time data from the configured client and updates the APCu cache if enabled.
      */
-    protected function updateCache($now): array
+    protected function updateCache(): array
     {
         $manager = new ClientManager($this->config);
         $data = $manager->getAvailableClientData();
@@ -63,6 +62,7 @@ class CacheManager
 
         if ($this->isCacheEnabled() && $this->isApcuAvailable()) {
             $remoteTs = (float) $remote->format('U.u');
+            $now = microtime(true);
             $cache = [
                 'timezone' => $data['timezone'],
                 'client_name' => $data['client_name'],
