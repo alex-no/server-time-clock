@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+  <paths>
+    <!-- Directories to be scanned -->
+    <directory>src</directory>
+  </paths>
+
+  <title>Server Time Clock API</title>
+  <template>default</template>
+
+  <output>docs</output>
+
+  <ignore hidden="true">
+    <!-- Ignore tests if they are located elsewhere -->
+    <directory>tests</directory>
+    <directory>vendor</directory>
+  </ignore>
+</phpdoc>
