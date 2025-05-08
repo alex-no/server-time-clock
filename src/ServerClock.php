@@ -8,18 +8,28 @@ use ServerTimeClock\Internal\CacheManager;
 
 class ServerClock
 {
-    private DateTimeImmutable $datetime;
-    private string $timezone;
-    private string $clientName;
+    /**
+     * CacheManager instance to handle caching of time data.
+     *
+     * @var CacheManager
+     */
+    private CacheManager $cache;
+
+    /**
+     * The data array contains the current datetime, timezone, and client name.
+     *
+     * @var array{
+     *     datetime: \DateTimeImmutable,
+     *     timezone: \DateTimeZone,
+     *     clientName: string
+     * }
+     */
+    private array $data;
 
     public function __construct(array $config)
     {
-        $cache = new CacheManager($config);
-        $data = $cache->getCachedTimeData();
-
-        $this->datetime = $data['datetime'];
-        $this->timezone = $data['timezone'];
-        $this->clientName = $data['client_name'];
+        $this->cache = new CacheManager($config);
+        $this->refreshData();
     }
 
     /**
@@ -29,7 +39,7 @@ class ServerClock
      */
     public function now(): DateTimeImmutable
     {
-        return $this->datetime;
+        return $this->data['datetime'];
     }
 
     /**
@@ -39,7 +49,7 @@ class ServerClock
      */
     public function getTimezone(): DateTimeZone
     {
-        return new DateTimeZone($this->timezone);
+        return $this->data['timezone'];
     }
 
     /**
@@ -49,6 +59,41 @@ class ServerClock
      */
     public function getClientName(): string
     {
-        return $this->clientName;
+        return $this->data['clientName'];
+    }
+
+    /**
+     * Returns the full data array containing datetime, timezone, and client name.
+     *
+     * @return array{
+     *     datetime: \DateTimeImmutable,
+     *     timezone: \DateTimeZone,
+     *     clientName: string
+     * }
+     */
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * Refreshes the cached data by fetching new data from the configured client.
+     *
+     * @return array{
+     *     datetime: \DateTimeImmutable,
+     *     timezone: \DateTimeZone,
+     *     clientName: string
+     * }
+     */
+    public function refreshData(): array
+    {
+        $data = $this->cache->getCachedTimeData();
+
+        $this->data = [
+            'datetime' => $data['datetime'],
+            'timezone' => new DateTimeZone($data['timezone']),
+            'clientName' => $data['client_name'],
+        ];
+        return $this->data;
     }
 }
