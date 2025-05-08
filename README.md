@@ -121,6 +121,18 @@ This package is framework-agnostic. Laravel and Yii2 integrations are provided f
 | Laravel   | `laravel/framework`        | Optional  |
 | Yii2      | `yiisoft/yii2`             | Optional  |
 
+## APCu Cache Requirements
+
+If you enable caching (enable_cache => true), make sure the [APCu extension](https://www.php.net/manual/en/book.apcu.php) is installed and enabled in your PHP configuration. This typically means:
+
+ *  The apcu extension must be installed (e.g., via pecl install apcu or appropriate package manager).
+ *  For CLI usage (e.g., when running tests), ensure apc.enable_cli=1 is set in your php.ini.
+
+You can verify if APCu is available by running:
+```bash
+php -i | grep apcu
+```
+
 ## Testing
 Run PHPUnit tests:
 ```bash
