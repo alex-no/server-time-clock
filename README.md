@@ -50,6 +50,77 @@ echo $now->format(DATE_ATOM);
 
 🌐 TimeApiIo – no key required
 
+## Laravel Integration
+
+You can integrate this package into Laravel with minimal setup.
+
+### Configuration (Optional)
+
+To publish the config file:
+
+```bash
+php artisan vendor:publish --tag=server-clock-config
+```
+
+This will create config/server-clock.php:
+
+```php
+return [
+    'client' => 'WorldTimeApi',
+    'credentials' => [
+        // 'IpGeoLocation' => '',
+    ],
+    'enable_cache' => true,
+    'cache_ttl' => 300,
+];
+```
+
+### Usage in Laravel
+
+```php
+use ServerTimeClock\ServerClock;
+
+$clock = app(ServerClock::class);
+echo $clock->now()->format('c');
+```
+
+## Yii2 Integration
+
+### Configuration
+You may use the ServerClock class directly or configure it as a Yii2 component:
+
+```php
+'components' => [
+    'serverClock' => [
+        'class' => \ServerTimeClock\Yii\ServerClockComponent::class,
+        'client' => 'WorldTimeApi',
+        'credentials' => [
+            // 'IpGeoLocation' => '',
+        ],
+        'enableCache' => true,
+        'cacheTtl' => 300,
+    ],
+],
+```
+
+### Usage
+Then use it:
+
+```php
+Yii::$app->serverClock->now();
+```
+
+> **Note**: Yii2 support is optional and requires yiisoft/yii2 to be installed in your project.
+
+## Optional Dependencies
+
+This package is framework-agnostic. Laravel and Yii2 integrations are provided for convenience.
+
+| Framework | Package                    | Required? |
+|-----------|----------------------------|-----------|
+| Laravel   | `laravel/framework`        | Optional  |
+| Yii2      | `yiisoft/yii2`             | Optional  |
+
 ## Testing
 Run PHPUnit tests:
 ```bash
