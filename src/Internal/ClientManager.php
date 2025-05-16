@@ -1,5 +1,13 @@
 <?php
-
+declare(strict_types = 1);
+/**
+ * This file is part of the ServerTimeClock package.
+ *
+ * (c) 2023 ServerTimeClock
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace ServerTimeClock\Internal;
 
 use RuntimeException;
@@ -67,6 +75,9 @@ class ClientManager
                 $data = $client->fetch();
                 return $data;
             } catch (\RuntimeException $e) {
+                // echo "Trying client: $name\n";
+                // var_dump($e->getMessage());
+                // Log the error or handle it as needed
                 // Ignore the error and try the next client
             }
         }

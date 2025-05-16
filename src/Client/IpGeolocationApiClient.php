@@ -1,5 +1,13 @@
 <?php
-
+declare(strict_types = 1);
+/**
+ * This file is part of the ServerTimeClock package.
+ *
+ * (c) 2023 ServerTimeClock
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace ServerTimeClock\Client;
 
 use RuntimeException;
@@ -45,7 +53,7 @@ class IpGeolocationApiClient extends BaseTimeApiClient implements TimeApiClient
     protected function normalizeData(array $sourceData): array
     {
         $time = explode(':', $sourceData['time_24'] ?? '');
-        $unixTime = explode('.', $sourceData['date_time_unix'] ?? '');
+        $unixTime = explode('.', strval($sourceData['date_time_unix']) ?? '');
         return [
             'client_name' => 'IpGeoLocation',
             'timezone' => $sourceData['timezone'] ?? null,
