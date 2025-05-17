@@ -7,30 +7,28 @@ use ServerTimeClock\ServerClock;
 
 class ServerClockTest extends TestCase
 {
-    private array $config;
-
     /**
-     * @before
+    * Data provider, returns an array of configurations
      */
-    public function clientProvider(): array
+    public static function clientProvider(): array
     {
         $path = __DIR__ . '/config/server_clock_test.json';
         $json = file_get_contents($path);
         $baseConfig = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
 
         return [
-            'worldtimeapi' => [array_merge($baseConfig, ['client' => 'worldtimeapi', 'timezone' => 'Europe/Berlin'])],
-            'ipgeolocation' => [array_merge($baseConfig, ['client' => 'ipgeolocation', 'timezone' => 'America/New_York'])],
-            'timeapiio' => [array_merge($baseConfig, ['client' => 'timeapiio', 'timezone' => 'Asia/Tokyo'])],
+            'WorldTimeApi' => [array_merge($baseConfig, ['client' => 'WorldTimeApi'])],
+            'IpGeoLocation' => [array_merge($baseConfig, ['client' => 'IpGeoLocation'])],
+            'TimeApiIo' => [array_merge($baseConfig, ['client' => 'TimeApiIo'])],
         ];
     }
 
     /**
      * @dataProvider clientProvider
      */
-    public function testNowReturnsDateTimeImmutable(): void
+    public function testNowReturnsDateTimeImmutable(array $config): void
     {
-        $clock = ServerClock::getInstance($this->config);
+        $clock = ServerClock::getInstance($config);
         $now = $clock->now();
         $clientName = $clock->getClientName();
 
@@ -41,9 +39,9 @@ class ServerClockTest extends TestCase
     /**
      * @dataProvider clientProvider
      */
-    public function testTimezoneCanBeSpecified(): void
+    public function testTimezoneCanBeSpecified(array $config): void
     {
-        $clock = ServerClock::getInstance($this->config);
+        $clock = ServerClock::getInstance($config);
         $timezone = $clock->getTimezone();
 
         $this->assertNotEmpty($timezone->getName());
@@ -53,9 +51,8 @@ class ServerClockTest extends TestCase
     /**
      * @dataProvider clientProvider
      */
-    public function testInvalidClientThrowsException(): void
+    public function testInvalidClientThrowsException(array $config): void
     {
-        $config = $this->config;
         $config['client'] = 'InvalidClient';
 
         $this->expectException(\UnexpectedValueException::class);
