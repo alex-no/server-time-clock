@@ -7,32 +7,28 @@ use ServerTimeClock\ServerClock;
 
 class ServerClockTest extends TestCase
 {
-    public $config = [
-        'client' => 'WorldTimeApi', // preferred
-        'credentials' => [
-            'IpGeoLocation' => '71fba5dbb71e4e87a94cea31783d9f2a',  // Example key
-            // 'WorldTimeApi' => 'TOKEN',
-        ],
-        'enable_cache' => true,
-        'cache_ttl' => 300,
-    ];
+    private array $config;
 
     /**
-     * @dataProvider clientProvider
+     * @before
      */
-    public function testInvalidClientThrowsException()
+    public function clientProvider(): array
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $path = __DIR__ . '/config/server_clock_test.json';
+        $json = file_get_contents($path);
+        $baseConfig = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
 
-        $config = $this->config;
-        $config['client'] = 'InvalidClient';
-        ServerClock::getInstance($config);
+        return [
+            'worldtimeapi' => [array_merge($baseConfig, ['client' => 'worldtimeapi', 'timezone' => 'Europe/Berlin'])],
+            'ipgeolocation' => [array_merge($baseConfig, ['client' => 'ipgeolocation', 'timezone' => 'America/New_York'])],
+            'timeapiio' => [array_merge($baseConfig, ['client' => 'timeapiio', 'timezone' => 'Asia/Tokyo'])],
+        ];
     }
 
     /**
      * @dataProvider clientProvider
      */
-    public function testNowReturnsDateTimeImmutable()
+    public function testNowReturnsDateTimeImmutable(): void
     {
         $clock = ServerClock::getInstance($this->config);
         $now = $clock->now();
@@ -45,13 +41,24 @@ class ServerClockTest extends TestCase
     /**
      * @dataProvider clientProvider
      */
-    public function testTimezoneCanBeSpecified()
+    public function testTimezoneCanBeSpecified(): void
     {
         $clock = ServerClock::getInstance($this->config);
-        $now = $clock->now();
+        $timezone = $clock->getTimezone();
 
-        $timezone = $now->getTimezone();
-        $this->assertInstanceOf(\DateTimeZone::class, $timezone);
         $this->assertNotEmpty($timezone->getName());
+        $this->assertInstanceOf(\DateTimeZone::class, $timezone);
+    }
+
+    /**
+     * @dataProvider clientProvider
+     */
+    public function testInvalidClientThrowsException(): void
+    {
+        $config = $this->config;
+        $config['client'] = 'InvalidClient';
+
+        $this->expectException(\UnexpectedValueException::class);
+        ServerClock::getInstance($config);
     }
 }
