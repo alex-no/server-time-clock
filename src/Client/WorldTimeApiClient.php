@@ -12,7 +12,7 @@ namespace ServerTimeClock\Client;
 
 use RuntimeException;
 
-class WorldTimeApiClient extends BaseTimeApiClient implements TimeApiClient
+final class WorldTimeApiClient extends BaseTimeApiClient implements TimeApiClient
 {
     /**
      * The API endpoint for the WorldTimeAPI service.

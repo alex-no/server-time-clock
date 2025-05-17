@@ -12,7 +12,7 @@ namespace ServerTimeClock\Client;
 
 use RuntimeException;
 
-class IpGeolocationApiClient extends BaseTimeApiClient implements TimeApiClient
+final class IpGeolocationApiClient extends BaseTimeApiClient implements TimeApiClient
 {
     /**
      * The API endpoint for the IP Geolocation service.

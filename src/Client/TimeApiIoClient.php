@@ -12,7 +12,7 @@ namespace ServerTimeClock\Client;
 
 use RuntimeException;
 
-class TimeApiIoClient extends BaseTimeApiClient implements TimeApiClient
+final class TimeApiIoClient extends BaseTimeApiClient implements TimeApiClient
 {
     /**
      * The API endpoint for the TimeAPI service.

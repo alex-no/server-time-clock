@@ -55,11 +55,6 @@ abstract class BaseTimeApiClient
     {
         $response = $this->executeCurl($curlOpt);
 
-        $data = json_decode($response, true);
-        if (!is_array($data)) {
-            throw new RuntimeException("Invalid JSON received from time API");
-        }
-
-        return $data;
+        return json_decode($response, true, 512, JSON_THROW_ON_ERROR);
     }
 }

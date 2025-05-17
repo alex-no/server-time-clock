@@ -22,7 +22,7 @@ use ServerTimeClock\Internal\CacheManager;
  *
  * @package ServerTimeClock
  */
-class ServerClock
+final class ServerClock
 {
     /**
      * The data array contains the current datetime, timezone, and client name.
