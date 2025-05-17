@@ -31,7 +31,7 @@ class ClientManager
      * @var array Configuration array containing client and credentials.
      */
     public function __construct(
-        private array $config
+        private readonly array $config
     ) {}
 
     /**

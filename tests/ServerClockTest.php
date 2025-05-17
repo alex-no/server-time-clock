@@ -26,7 +26,7 @@ class ServerClockTest extends TestCase
 
         $config = $this->config;
         $config['client'] = 'InvalidClient';
-        new ServerClock($config);
+        ServerClock::getInstance($config);
     }
 
     /**
@@ -34,7 +34,7 @@ class ServerClockTest extends TestCase
      */
     public function testNowReturnsDateTimeImmutable()
     {
-        $clock = new ServerClock($this->config);
+        $clock = ServerClock::getInstance($this->config);
         $now = $clock->now();
         $clientName = $clock->getClientName();
 
@@ -47,7 +47,7 @@ class ServerClockTest extends TestCase
      */
     public function testTimezoneCanBeSpecified()
     {
-        $clock = new ServerClock($this->config);
+        $clock = ServerClock::getInstance($this->config);
         $now = $clock->now();
 
         $timezone = $now->getTimezone();

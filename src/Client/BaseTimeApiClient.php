@@ -23,7 +23,7 @@ abstract class BaseTimeApiClient
      * Authorization key for cURL requests
      */
     public function __construct(
-        protected ?string $apiKey = null
+        protected readonly ?string $apiKey = null
     ) {}
 
     /**
