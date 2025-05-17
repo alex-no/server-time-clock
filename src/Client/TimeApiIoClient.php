@@ -25,10 +25,6 @@ class TimeApiIoClient extends BaseTimeApiClient implements TimeApiClient
      */
     const ENDPOINT_URL = 'https://api.ipify.org';
 
-    public function __construct($apiKey = null)
-    {
-    }
-
     /**
      * Fetches the current time and timezone information from the TimeAPI service.
      *

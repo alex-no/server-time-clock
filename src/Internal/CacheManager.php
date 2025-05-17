@@ -16,15 +16,21 @@ use ServerTimeClock\Internal\ClientManager;
 
 class CacheManager
 {
-    private const DEFAULT_TTL = 3600; // seconds
+    /**
+     * Default cache TTL in seconds.
+     */
+    private const DEFAULT_TTL = 3600;
+    /**
+     * Cache key for storing server time data.
+     */
     private const CACHE_KEY = 'server_time_clock_cache';
 
-    private array $config;
-
-    public function __construct(array $config)
-    {
-        $this->config = $config;
-    }
+    /**
+     * @var array Configuration array containing client and credentials.
+     */
+    public function __construct(
+        private array $config
+    ) {}
 
     /**
      * Returns cached time data or fetches new data if cache is missing or disabled.

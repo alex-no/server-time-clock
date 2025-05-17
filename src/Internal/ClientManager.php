@@ -30,12 +30,9 @@ class ClientManager
     /**
      * @var array Configuration array containing client and credentials.
      */
-    protected array $config;
-
-    public function __construct(array $config)
-    {
-        $this->config = $config;
-    }
+    public function __construct(
+        private array $config
+    ) {}
 
     /**
      * Tries clients in configured order until one succeeds.

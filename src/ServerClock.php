@@ -25,13 +25,6 @@ use ServerTimeClock\Internal\CacheManager;
 class ServerClock
 {
     /**
-     * CacheManager instance to handle caching of time data.
-     *
-     * @var CacheManager
-     */
-    private CacheManager $cache;
-
-    /**
      * The data array contains the current datetime, timezone, and client name.
      *
      * @var array{
@@ -43,7 +36,7 @@ class ServerClock
     private array $data;
 
     /**
-     * ServerClock constructor.
+     * Creates a new instance of ServerClock with the given configuration.
      *
      * @param array{
      *     client?: string,  // Preferred client for receiving time data (e.g., 'WorldTimeApi', 'IpGeoLocation')
@@ -51,12 +44,25 @@ class ServerClock
      *     enableCache?: bool,  // Enable APCu-based caching (default: false)
      *     cacheTtl?: int,      // Cache TTL in seconds (default: 300)
      * } $config Configuration for cache and time source.
+     * @return ServerClock
+     * @throws \Exception If the client is not available or credentials are missing.
      */
-    public function __construct(array $config)
+    public static function getInstance(array $config): self
     {
-        $this->cache = new CacheManager($config);
-        $this->refreshData();
+        $instance = new self(new CacheManager($config));
+        $instance->refreshData();
+        return $instance;
     }
+
+    /**
+     * ServerClock constructor.
+     *
+     * @param CacheManager $cache CacheManager instance to handle caching of time data.
+     *
+     */
+    public function __construct(
+        private CacheManager $cache
+    ) {}
 
     /**
      * Returns the current server time as DateTimeImmutable.

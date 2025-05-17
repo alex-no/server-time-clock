@@ -20,6 +20,13 @@ abstract class BaseTimeApiClient
     const TIMEOUT = 5;
 
     /**
+     * Authorization key for cURL requests
+     */
+    public function __construct(
+        protected ?string $apiKey = null
+    ) {}
+
+    /**
      * Executes a cURL request with the given options.
      * Throws an exception if the request fails or if the HTTP status code is 4xx or 5xx.
      */

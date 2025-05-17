@@ -20,13 +20,6 @@ class WorldTimeApiClient extends BaseTimeApiClient implements TimeApiClient
      */
     const ENDPOINT = 'https://worldtimeapi.org/api/ip';
 
-    private ?string $apiKey;
-
-    public function __construct(?string $apiKey = null)
-    {
-        $this->apiKey = $apiKey;
-    }
-
     /**
      * Fetches the current time and timezone information from the TimeAPI service.
      *

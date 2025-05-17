@@ -20,13 +20,6 @@ class IpGeolocationApiClient extends BaseTimeApiClient implements TimeApiClient
      */
     const ENDPOINT = 'https://api.ipgeolocation.io/timezone?apiKey=';
 
-    private ?string $apiKey;
-
-    public function __construct(string $apiKey)
-    {
-        $this->apiKey = $apiKey;
-    }
-
     /**
      * Fetches the current time and timezone information from the TimeAPI service.
      *
