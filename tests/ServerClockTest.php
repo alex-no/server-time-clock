@@ -54,6 +54,7 @@ class ServerClockTest extends TestCase
     public function testInvalidClientThrowsException(array $config): void
     {
         $config['client'] = 'InvalidClient';
+        $config['enable_cache'] = false; // Disable cache for this test
 
         $this->expectException(\UnexpectedValueException::class);
         ServerClock::getInstance($config);
