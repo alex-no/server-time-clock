@@ -41,8 +41,9 @@ abstract class BaseTimeApiClient
         $error = curl_error($curl);
         curl_close($curl);
 
-        if ($response === false || $httpCode >= 400) {
-            throw new RuntimeException("Failed to fetch time data: {$error} (HTTP {$httpCode})");
+        if ($response === false || $httpCode >= 400 || $httpCode === 0) {
+            $errorMsg = $error ?: 'Unknown cURL error';
+            throw new RuntimeException("Failed to fetch time data: {$errorMsg} (HTTP {$httpCode})");
         }
 
         return $response;

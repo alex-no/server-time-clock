@@ -23,9 +23,11 @@ $clock = new ServerClock([
     'client' => 'WorldTimeApi', // or 'IpGeoLocation', 'TimeApiIo'
     'credentials' => [
         'IpGeoLocation' => 'your-api-key', // optional, depending on the provider
+        'WorldTimeApi' => 'your-api-key2',
     ],
     'enable_cache' => true,
     'cache_ttl' => 300, // seconds
+    'useMock' => false, // Mosk is usually used for testing.
 ]);
 
 $now = $clock->now(); // instance of DateTimeImmutable
@@ -40,6 +42,7 @@ echo $now->format(DATE_ATOM);
 | `credentials`  | array  | API keys for time providers (optional)                          |
 | `enable_cache` | bool   | Enable APCu-based caching (default: `false`)                    |
 | `cache_ttl`    | int    | Cache duration in seconds                                       |
+| `useMock`      | bool   | Enable/Disable Mock for tests (default: `false`)                |
 
 
 ## Providers

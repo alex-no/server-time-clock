@@ -26,7 +26,7 @@ final class IpGeolocationApiClient extends BaseTimeApiClient implements TimeApiC
      * @return array The normalized data containing timezone and time information.
      * @throws RuntimeException if the API request fails or returns invalid data.
      */
-    public function fetch(): array
+    public function fetchTimeData(): array
     {
         $url = self::ENDPOINT . urlencode($this->apiKey);
 
@@ -41,14 +41,27 @@ final class IpGeolocationApiClient extends BaseTimeApiClient implements TimeApiC
     }
 
     /**
+     * Get the name of the client.
+     *
+     * @return string Client name.
+     */
+    public function getClientName(): string
+    {
+        return 'IpGeoLocation';
+    }
+
+    /**
      * Normalize the data structure to match your application's needs
+     *
+     * @param array $sourceData The raw data received from the API.
+     * @return array Normalized data structure.
      */
     protected function normalizeData(array $sourceData): array
     {
         $time = explode(':', $sourceData['time_24'] ?? '');
         $unixTime = explode('.', strval($sourceData['date_time_unix']) ?? '');
         return [
-            'client_name' => 'IpGeoLocation',
+            'client_name' => $this->getClientName(),
             'timezone' => $sourceData['timezone'] ?? null,
             'year' => $sourceData['year'] ?? null,
             'month' => $sourceData['month'] ?? null,

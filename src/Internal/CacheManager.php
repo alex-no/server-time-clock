@@ -34,6 +34,11 @@ class CacheManager
 
     /**
      * Returns cached time data or fetches new data if cache is missing or disabled.
+     * @return array{
+     *     client_name: string,
+     *     timezone: string,
+     *     datetime: \DateTimeImmutable
+     * }
      */
     public function getCachedTimeData(): array
     {
@@ -58,6 +63,11 @@ class CacheManager
 
     /**
      * Fetches new time data from the configured client and updates the APCu cache if enabled.
+     * @return array{
+     *     client_name: string,
+     *     timezone: string,
+     *     datetime: \DateTimeImmutable
+     * }
      */
     protected function updateCache(): array
     {
@@ -67,9 +77,9 @@ class CacheManager
         $remote = DateTimeImmutable::createFromFormat(
             'Y-m-d H:i:s.u',
             sprintf(
-                '%d-%02d-%02d %02d:%02d:%02d.%06d',
+                '%d-%02d-%02d %02d:%02d:%02d.%03d',
                 $data['year'], $data['month'], $data['day'],
-                $data['hour'], $data['minute'], $data['seconds'], $data['milli_seconds'] * 1000
+                $data['hour'], $data['minute'], $data['seconds'], $data['milli_seconds']
             ),
             new DateTimeZone($data['timezone'])
         );

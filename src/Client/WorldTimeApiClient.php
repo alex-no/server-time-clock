@@ -26,7 +26,7 @@ final class WorldTimeApiClient extends BaseTimeApiClient implements TimeApiClien
      * @return array The normalized data containing timezone and time information.
      * @throws RuntimeException if the API request fails or returns invalid data.
      */
-    public function fetch(): array
+    public function fetchTimeData(): array
     {
         $headers = [];
         if ($this->apiKey !== null) {
@@ -46,12 +46,24 @@ final class WorldTimeApiClient extends BaseTimeApiClient implements TimeApiClien
     }
 
     /**
+     * Get the name of the client.
+     *
+     * @return string Client name.
+     */
+    public function getClientName(): string
+    {
+        return 'WorldTimeApi';
+    }
+
+    /**
      * Normalize the data structure to match your application's needs
+     * @param array $sourceData The raw data received from the API.
+     * @return array Normalized data structure.
      */
     protected function normalizeData(array $sourceData): array
     {
         return [
-            'client_name' => 'WorldTimeApi',
+            'client_name' => $this->getClientName(),
             'timezone' => $sourceData['timeZone'] ?? null,
             'year' => $sourceData['year'] ?? null,
             'month' => $sourceData['month'] ?? null,

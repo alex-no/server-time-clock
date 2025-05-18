@@ -31,7 +31,7 @@ final class TimeApiIoClient extends BaseTimeApiClient implements TimeApiClient
      * @return array The normalized data containing timezone and time information.
      * @throws RuntimeException if the API request fails or returns invalid data.
      */
-    public function fetch(): array
+    public function fetchTimeData(): array
     {
         $ip = $this->getPublicIp();
         $url = self::ENDPOINT . '?ipAddress=' . urlencode($ip);
@@ -59,12 +59,24 @@ final class TimeApiIoClient extends BaseTimeApiClient implements TimeApiClient
     }
 
     /**
+     * Get the name of the client.
+     *
+     * @return string Client name.
+     */
+    public function getClientName(): string
+    {
+        return 'TimeApiIo';
+    }
+
+    /**
      * Normalize the data structure to match your application's needs
+     * @param array $sourceData The raw data received from the API.
+     * @return array The normalized data structure.
      */
     protected function normalizeData(array $sourceData): array
     {
         return [
-            'client_name' => 'TimeApiIo',
+            'client_name' => $this->getClientName(),
             'timezone' => $sourceData['timeZone'] ?? null,
             'year' => $sourceData['year'] ?? null,
             'month' => $sourceData['month'] ?? null,

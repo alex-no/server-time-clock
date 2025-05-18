@@ -18,5 +18,12 @@ interface TimeApiClient
      * @return array Parsed JSON response.
      * @throws \RuntimeException if fetching fails or response is invalid.
      */
-    public function fetch(): array;
+    public function fetchTimeData(): array;
+
+    /**
+     * Get the name of the client.
+     * 
+     * @return string Client name.
+     */
+    public function getClientName(): string;
 }

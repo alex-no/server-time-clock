@@ -21,7 +21,7 @@ class ClientManager
     /**
      * Available clients in order of preference.
      */
-    const CLIENTS = [
+    private const CLIENTS = [
         'IpGeoLocation',
         'WorldTimeApi',
         'TimeApiIo',
@@ -36,6 +36,17 @@ class ClientManager
 
     /**
      * Tries clients in configured order until one succeeds.
+     * @return array{
+     *     client_name: string,
+     *     timezone: string,
+     *     year: int,
+     *     month: int,
+     *     day: int,
+     *     hour: int,
+     *     minute: int,
+     *     seconds: int,
+     *     milli_seconds: int
+     * }
      */
     public function getAvailableClientData(): array
     {
@@ -59,23 +70,24 @@ class ClientManager
             }
         }
 
+        $useMock = $this->config['useMock'] ?? false;
         foreach ($candidates as $name) {
             try {
-                $useMock = $this->config['useMock'] ?? false;
                 $client = match ($name) {
-                    'IpGeoLocation' => new IpGeolocationApiClient($credentials['IpGeoLocation'] ?? '', $useMock),
+                    'IpGeoLocation' => new IpGeolocationApiClient(
+                        $credentials['IpGeoLocation'] ?? throw new RuntimeException('Missing credentials for IpGeoLocation'),
+                        $useMock
+                    ),
                     'TimeApiIo' => new TimeApiIoClient(null, $useMock),
                     'WorldTimeApi' => new WorldTimeApiClient($credentials['WorldTimeApi'] ?? null, $useMock),
                     default => throw new RuntimeException("Unknown client: $name"),
                 };
 
                 // Test call and return data
-                $data = $client->fetch();
+                $data = $client->fetchTimeData();
                 return $data;
             } catch (\RuntimeException $e) {
-                // echo "Trying client: $name\n";
-                // var_dump($e->getMessage());
-                // Log the error or handle it as needed
+                // Mayby an error occurred, Log the error or handle it as needed
                 // Ignore the error and try the next client
             }
         }
