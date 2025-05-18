@@ -4,11 +4,21 @@ namespace ServerTimeClock\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ServerTimeClock\ServerClock;
+use DateTimeImmutable;
+use DateTimeZone;
+use UnexpectedValueException;
 
+/**
+ * @covers \ServerTimeClock\ServerClock
+ */
 class ServerClockTest extends TestCase
 {
     /**
-    * Data provider, returns an array of configurations
+     * Provides different valid client configurations for testing.
+     *
+     * Each configuration uses a different time API client.
+     *
+     * @return array<string, array{0: array<string, mixed>}>
      */
     public static function clientProvider(): array
     {
@@ -17,13 +27,16 @@ class ServerClockTest extends TestCase
         $baseConfig = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
 
         return [
-            'WorldTimeApi' => [array_merge($baseConfig, ['client' => 'WorldTimeApi'])],
-            'IpGeoLocation' => [array_merge($baseConfig, ['client' => 'IpGeoLocation'])],
-            'TimeApiIo' => [array_merge($baseConfig, ['client' => 'TimeApiIo'])],
+            'WorldTimeApi'    => [array_merge($baseConfig, ['client' => 'WorldTimeApi'])],
+            'IpGeoLocation'   => [array_merge($baseConfig, ['client' => 'IpGeoLocation'])],
+            'TimeApiIo'       => [array_merge($baseConfig, ['client' => 'TimeApiIo'])],
         ];
     }
 
     /**
+     * Ensures that the `now()` method returns a valid DateTimeImmutable instance
+     * and that the client name is not empty.
+     *
      * @dataProvider clientProvider
      */
     public function testNowReturnsDateTimeImmutable(array $config): void
@@ -32,11 +45,14 @@ class ServerClockTest extends TestCase
         $now = $clock->now();
         $clientName = $clock->getClientName();
 
-        $this->assertNotEmpty($clientName);
-        $this->assertInstanceOf(\DateTimeImmutable::class, $now);
+        $this->assertNotEmpty($clientName, 'Client name should not be empty.');
+        $this->assertInstanceOf(DateTimeImmutable::class, $now, 'Expected instance of DateTimeImmutable.');
     }
 
     /**
+     * Verifies that the timezone returned by the client is a valid DateTimeZone
+     * and has a non-empty name.
+     *
      * @dataProvider clientProvider
      */
     public function testTimezoneCanBeSpecified(array $config): void
@@ -44,19 +60,21 @@ class ServerClockTest extends TestCase
         $clock = ServerClock::getInstance($config);
         $timezone = $clock->getTimezone();
 
-        $this->assertNotEmpty($timezone->getName());
-        $this->assertInstanceOf(\DateTimeZone::class, $timezone);
+        $this->assertInstanceOf(DateTimeZone::class, $timezone, 'Expected instance of DateTimeZone.');
+        $this->assertNotEmpty($timezone->getName(), 'Timezone name should not be empty.');
     }
 
     /**
+     * Ensures that providing an invalid client name throws an UnexpectedValueException.
+     *
      * @dataProvider clientProvider
      */
     public function testInvalidClientThrowsException(array $config): void
     {
         $config['client'] = 'InvalidClient';
-        $config['enable_cache'] = false; // Disable cache for this test
+        $config['enable_cache'] = false; // Disable cache to ensure fresh lookup
 
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         ServerClock::getInstance($config);
     }
 }
