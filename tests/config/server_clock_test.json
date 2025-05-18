@@ -4,5 +4,6 @@
     "IpGeoLocation": "71fba5dbb71e4e87a94cea31783d9f2a"
   },
   "enable_cache": true,
-  "cache_ttl": 300
+  "cache_ttl": 300,
+  "useMock": true
 }

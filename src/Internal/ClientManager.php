@@ -61,10 +61,11 @@ class ClientManager
 
         foreach ($candidates as $name) {
             try {
+                $useMock = $this->config['useMock'] ?? false;
                 $client = match ($name) {
-                    'IpGeoLocation' => new IpGeolocationApiClient($credentials['IpGeoLocation'] ?? ''),
-                    'TimeApiIo' => new TimeApiIoClient(),
-                    'WorldTimeApi' => new WorldTimeApiClient($credentials['WorldTimeApi'] ?? null),
+                    'IpGeoLocation' => new IpGeolocationApiClient($credentials['IpGeoLocation'] ?? '', $useMock),
+                    'TimeApiIo' => new TimeApiIoClient(null, $useMock),
+                    'WorldTimeApi' => new WorldTimeApiClient($credentials['WorldTimeApi'] ?? null, $useMock),
                     default => throw new RuntimeException("Unknown client: $name"),
                 };
 

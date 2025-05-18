@@ -37,7 +37,7 @@ final class IpGeolocationApiClient extends BaseTimeApiClient implements TimeApiC
         ];
 
         $data = $this->fetchAndDecode($curlOptions);
-        return $this->normalizeData($data);
+        return $this->useMock ? $data : $this->normalizeData($data);
     }
 
     /**

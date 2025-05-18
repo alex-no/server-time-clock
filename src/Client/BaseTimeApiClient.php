@@ -23,7 +23,8 @@ abstract class BaseTimeApiClient
      * Authorization key for cURL requests
      */
     public function __construct(
-        protected readonly ?string $apiKey = null
+        protected readonly ?string $apiKey = null,
+        protected readonly bool $useMock = false
     ) {}
 
     /**
@@ -53,8 +54,39 @@ abstract class BaseTimeApiClient
      */
     protected function fetchAndDecode(array $curlOpt): array
     {
+        if ($this->useMock) {
+            return $this->getMockData();
+        }
+
         $response = $this->executeCurl($curlOpt);
 
         return json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+    }
+
+    /**
+     * Mock data for tests or local development
+     * @return array<array-key, mixed>
+     * @throws \JsonException
+     */
+    protected function getMockData(): array
+    {
+        $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
+        $microTime = $now->format('U.u');
+        $milliSeconds = match (true) {
+            str_contains($microTime, '.') => (int) substr(explode('.', $microTime)[1] ?? '000', 0, 3),
+            default => 0,
+        };
+
+        return [
+            'client_name'    => 'MockClient',
+            'timezone'       => $now->getTimezone()->getName(),
+            'year'           => (int) $now->format('Y'),
+            'month'          => (int) $now->format('m'),
+            'day'            => (int) $now->format('d'),
+            'hour'           => (int) $now->format('H'),
+            'minute'         => (int) $now->format('i'),
+            'seconds'        => (int) $now->format('s'),
+            'milli_seconds'  => $milliSeconds,
+        ];
     }
 }

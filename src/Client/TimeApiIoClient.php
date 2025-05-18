@@ -43,7 +43,7 @@ final class TimeApiIoClient extends BaseTimeApiClient implements TimeApiClient
         ];
 
         $data = $this->fetchAndDecode($curlOptions);
-        return $this->normalizeData($data);
+        return $this->useMock ? $data : $this->normalizeData($data);
     }
 
     private function getPublicIp(): string

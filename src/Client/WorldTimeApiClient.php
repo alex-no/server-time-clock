@@ -42,7 +42,7 @@ final class WorldTimeApiClient extends BaseTimeApiClient implements TimeApiClien
         ];
 
         $data = $this->fetchAndDecode($curlOptions);
-        return $this->normalizeData($data);
+        return $this->useMock ? $data : $this->normalizeData($data);
     }
 
     /**
