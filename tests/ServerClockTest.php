@@ -9,7 +9,17 @@ use DateTimeZone;
 use UnexpectedValueException;
 
 /**
+ * Class ServerClockTest
+ *
+ * @version   1.2.0
+ * @author    Alex
+ * @since     2025-05-18
+ * @modified  2025-05-18 by Alex — added type hints and descriptions
+ * @package   ServerTimeClock\Tests
+ *
  * @covers \ServerTimeClock\ServerClock
+ *
+ * @todo Add test to verify caching behavior when cache is enabled and TTL is set
  */
 class ServerClockTest extends TestCase
 {
