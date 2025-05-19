@@ -69,9 +69,10 @@ This will create config/server-clock.php:
 
 ```php
 return [
-    'client' => 'WorldTimeApi',
+    'client' => 'WorldTimeApi', // Preferred time provider
     'credentials' => [
-        // 'IpGeoLocation' => '',
+        'IpGeoLocation' => 'your-api-key',
+        'WorldTimeApi' => 'your-api-key2',
     ],
     'enable_cache' => true,
     'cache_ttl' => 300,
@@ -96,9 +97,10 @@ You may use the ServerClock class directly or configure it as a Yii2 component:
 'components' => [
     'serverClock' => [
         'class' => \ServerTimeClock\Yii\ServerClockComponent::class,
-        'client' => 'WorldTimeApi',
+        'client' => 'WorldTimeApi',  // Preferred time provider
         'credentials' => [
-            // 'IpGeoLocation' => '',
+            'IpGeoLocation' => 'your-api-key',
+            'WorldTimeApi' => 'your-api-key2',
         ],
         'enableCache' => true,
         'cacheTtl' => 300,
