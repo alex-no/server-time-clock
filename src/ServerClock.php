@@ -101,7 +101,7 @@ final class ServerClock
      *     datetime: \DateTimeImmutable,
      *     timezone: \DateTimeZone,
      *     clientName: string
-     * }
+     * } Structured data from the time provider
      */
     public function getData(): array
     {
@@ -115,9 +115,10 @@ final class ServerClock
      *     datetime: \DateTimeImmutable,
      *     timezone: \DateTimeZone,
      *     clientName: string
-     * }
+     * } Updated data from the external provider
      *
      * @throws \RuntimeException If the time data could not be retrieved.
+     *
      * @see CacheManager::getCachedTimeData()
      */
     public function refreshData(): array
